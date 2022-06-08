@@ -6,9 +6,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/borakasmer/exchange-cli/parser"
 	"strings"
 	"time"
+
+	"github.com/borakasmer/exchange-cli/parser"
 
 	"github.com/spf13/cobra"
 )
@@ -19,13 +20,15 @@ var getCmd = &cobra.Command{
 	Short: "Bu Cli Tool ile, kur bilgileri anlık çekilir",
 	Long: `
 Herhangi bir tanımlama yapılmaz ise, Dolar "-d", eğer tanımlama yapılır ise 
-Euro "-e" veya Sterlin "-s" kur bilgileri Doviz.com anlık olarak, Parse Edilerek ekrana basılır. 
+Euro "-e" veya Sterlin "-s" kur bilgileri Doviz.com ve Wise.com anlık olarak, Parse Edilerek ekrana basılır. 
 
-**Doviz.com'da bir sorun olması durumunda, bu servis hizmet veremez!!'
+**Doviz.com'da veya Wise.com'da bir sorun olması durumunda, bu servis hizmet veremez!!'
 
 For example:
- .exchange get => Dolar [2022-04-18 22:16:26] : 14.6505₺
- .exchange get -e => Euro [2022-04-18 22:16:49] : 15.8084₺
+ .exchange get => Dolar [2022-06-08 12:26:53 - Doviz.com] : 17.1448₺
+ 				  Dolar [2022-06-08 12:26:46 - Wise.com] : 17.156000₺
+ .exchange get -e => Euro [2022-06-08 12:26:56 - Doviz.com] : 18.3792₺
+ 					 Euro [2022-06-08 12:26:46 - Wise.com] : 18.337999₺
 `,
 	/*Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("get called")
@@ -50,28 +53,37 @@ For example:
 func getDolar() {
 	var exchange, exchangeFlt string
 	exchange = parser.ParseWeb("DOLAR")
+	exchangeWise := parser.ParseWise("USD")
 	exchangeFlt = strings.Replace(exchange, ",", ".", 1)
 	current_time := time.Now()
-	fmt.Printf("Dolar [%s] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchangeFlt)
+	fmt.Printf("Dolar [%s - Doviz.com] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchangeFlt)
+	fmt.Println()
+	fmt.Printf("Dolar [%s - Wise.com] : %f₺", time.UnixMilli(exchangeWise.Time).Format("2006-01-02 15:04:05"), exchangeWise.Value)
 	fmt.Println()
 }
 func getEuro() {
 	var exchange, exchangeFlt string
 	exchange = parser.ParseWeb("EURO")
+	exchangeWise := parser.ParseWise("EUR")
 	exchangeFlt = strings.Replace(exchange, ",", ".", 1)
 
 	current_time := time.Now()
-	fmt.Printf("Euro [%s] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchangeFlt)
+	fmt.Printf("Euro [%s - Doviz.com] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchangeFlt)
+	fmt.Println()
+	fmt.Printf("Euro [%s - Wise.com] : %f₺", time.UnixMilli(exchangeWise.Time).Format("2006-01-02 15:04:05"), exchangeWise.Value)
 	fmt.Println()
 }
 
 func getSterlin() {
 	var exchange, exchangeFlt string
 	exchange = parser.ParseWeb("STERLİN")
+	exchangeWise := parser.ParseWise("GBP")
 	exchangeFlt = strings.Replace(exchange, ",", ".", 1)
 
 	current_time := time.Now()
-	fmt.Printf("Sterlin [%s] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchangeFlt)
+	fmt.Printf("Sterlin [%s - Doviz.com] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchangeFlt)
+	fmt.Println()
+	fmt.Printf("Sterlin [%s - Wise.com] : %f₺", time.UnixMilli(exchangeWise.Time).Format("2006-01-02 15:04:05"), exchangeWise.Value)
 	fmt.Println()
 }
 
