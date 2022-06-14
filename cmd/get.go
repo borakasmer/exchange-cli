@@ -6,9 +6,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/borakasmer/exchange-cli/parser"
 	"strings"
 	"time"
+
+	"github.com/borakasmer/exchange-cli/parser"
 
 	"github.com/spf13/cobra"
 )
@@ -19,7 +20,7 @@ var getCmd = &cobra.Command{
 	Short: "Bu Cli Tool ile, kur bilgileri anlık çekilir",
 	Long: `
 Herhangi bir tanımlama yapılmaz ise, Dolar "-d", eğer tanımlama yapılır ise 
-Euro "-e" veya Sterlin "-s" kur bilgileri Doviz.com anlık olarak, Parse Edilerek ekrana basılır. 
+Euro "-e", Sterlin "-s" veya Gram Altın "-g" kur bilgileri Doviz.com anlık olarak, Parse Edilerek ekrana basılır. 
 
 **Doviz.com'da bir sorun olması durumunda, bu servis hizmet veremez!!'
 
@@ -34,6 +35,7 @@ For example:
 		isDolar, _ := cmd.Flags().GetBool("dolar")
 		isEuro, _ := cmd.Flags().GetBool("euro")
 		isSterlin, _ := cmd.Flags().GetBool("sterlin")
+		isGold, _ := cmd.Flags().GetBool("gold")
 
 		if isDolar {
 			getDolar()
@@ -41,6 +43,8 @@ For example:
 			getEuro()
 		} else if isSterlin {
 			getSterlin()
+		} else if isGold {
+			getGold()
 		} else {
 			getDolar()
 		}
@@ -75,11 +79,20 @@ func getSterlin() {
 	fmt.Println()
 }
 
+func getGold() {
+	var exchange string
+	exchange = parser.ParseWeb("GRAMALTIN")
+	current_time := time.Now()
+	fmt.Printf("Gram altın [%s] : %s₺", current_time.Format("2006-01-02 15:04:05"), exchange)
+	fmt.Println()
+}
+
 func init() {
 	rootCmd.AddCommand(getCmd)
 	getCmd.Flags().BoolP("dolar", "d", false, "Get Dolar Currency")
 	getCmd.Flags().BoolP("euro", "e", false, "Get Euro Currency")
 	getCmd.Flags().BoolP("sterlin", "s", false, "Get Sterlin Currency")
+	getCmd.Flags().BoolP("gold", "g", false, "Get Gold Currency")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
