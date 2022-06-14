@@ -16,7 +16,7 @@ var rootCmd = &cobra.Command{
 	Short: "Bu Cli Tool ile, kur bilgileri anlık çekilir",
 	Long: `
 Herhangi bir tanımlama yapılmaz ise, Dolar "-d", eğer tanımlama yapılır ise 
-Euro "-e" veya Sterlin "-s" kur bilgileri Doviz.com anlık olarak, Parse Edilerek ekrana basılır. 
+Euro "-e", Sterlin "-s" veya Gram Altın "-g" kur bilgileri Doviz.com anlık olarak, Parse Edilerek ekrana basılır. 
 
 **Doviz.com'da bir sorun olması durumunda, bu servis hizmet veremez!!'
 
